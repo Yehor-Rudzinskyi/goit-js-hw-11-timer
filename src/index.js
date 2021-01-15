@@ -1,3 +1,4 @@
+
 import './styles.css';
 
 const refs = {
@@ -7,22 +8,43 @@ const refs = {
     secs: document.querySelector('span[data-value="secs"]'),
 }
 
+class CountdownTimer {
+  constructor({ selector, targetDate }) {
+    this.putTimer = document.querySelector(selector);
+    this.chooseDate = targetDate.getTime();
+    
+    this.begin()
+  }
 
-const date = new Date(2021, 5, 4);
-const deadTime = date.getTime();
+  begin() {
+    setInterval(() => {
+        const time = this.chooseDate - Date.now() 
+        refs.days.textContent = `${pad(Math.floor(time / (1000 * 60 * 60 * 24)))}`;
+        refs.hours.textContent = `${pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))}`;
+        refs.mins.textContent = `${pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)))}`;
+        refs.secs.textContent = `${pad(Math.floor((time % (1000 * 60)) / 1000))}`;
+    }, 1000);
+    
+    
+    function pad(value) {
+      return String(value).padStart(2, '0');
+    }
+    
+  }
 
-setInterval(() => {
-    const time = deadTime - Date.now() 
-    refs.days.textContent = `${pad(Math.floor(time / (1000 * 60 * 60 * 24)))}`;
-    refs.hours.textContent = `${pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))}`;
-    refs.mins.textContent = `${pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)))}`;
-    refs.secs.textContent = `${pad(Math.floor((time % (1000 * 60)) / 1000))}`;
-}, 1000);
+};
+
+const timer = new CountdownTimer({
+selector: '#timer-1',
+targetDate: new Date('Jul 17, 2021'),
+});
 
 
-function pad(value) {
-  return String(value).padStart(2, '0');
-}
+
+
+// const date = new Date(2021, 5, 4);
+// const deadTime = date.getTime();
+
 
 /*
  * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
