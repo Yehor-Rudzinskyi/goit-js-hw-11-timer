@@ -1,31 +1,43 @@
 
 import './styles.css';
+import dataSet from './markup.hbs'
 
-const refs = {
-    days: document.querySelector('span[data-value="days"]'),
-    hours: document.querySelector('span[data-value="hours"]'),
-    mins: document.querySelector('span[data-value="mins"]'),
-    secs: document.querySelector('span[data-value="secs"]'),
-}
 
 class CountdownTimer {
   constructor({ selector, targetDate }) {
     this.putTimer = document.querySelector(selector);
     this.chooseDate = targetDate.getTime();
     
+    
     this.begin()
   }
-
-  begin() {
+  
+  begin() { 
     setInterval(() => {
-        const time = this.chooseDate - Date.now() 
-        refs.days.textContent = `${pad(Math.floor(time / (1000 * 60 * 60 * 24)))}`;
-        refs.hours.textContent = `${pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))}`;
-        refs.mins.textContent = `${pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)))}`;
-        refs.secs.textContent = `${pad(Math.floor((time % (1000 * 60)) / 1000))}`;
+
+      const markup = dataSet(day, hour, min,sec)
+      this.putTimer.innerHTML = `${markup}`;
+
+      const refs = {
+          days: document.querySelector('span[data-value="days"]'),
+          hours: document.querySelector('span[data-value="hours"]'),
+          mins: document.querySelector('span[data-value="mins"]'),
+          secs: document.querySelector('span[data-value="secs"]'),
+      }
+
+      let day = 0;
+      let hour = 0;
+      let min = 0;
+      let sec = 0;
+      
+      const time = this.chooseDate - Date.now() 
+      refs.days.textContent = day = `${pad(Math.floor(time / (1000 * 60 * 60 * 24)))}`;
+      refs.hours.textContent = hour = `${pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))}`;
+      refs.mins.textContent = min = `${pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)))}`;
+      refs.secs.textContent = sec = `${pad(Math.floor((time % (1000 * 60)) / 1000))}`;
     }, 1000);
-    
-    
+
+
     function pad(value) {
       return String(value).padStart(2, '0');
     }
